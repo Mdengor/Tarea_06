@@ -1,3 +1,78 @@
+# Replicando gráficos de Plotly
+
+1.  Utilice este Notebook para replicar cualquiera de los gráficos financieros de la guía de Plotly (Ver 👉 [aquí](https://www.google.com/url?q=https%3A%2F%2Fplotly.com%2Fpython%2F%23financial-charts)
+
 ```{python}
-1 + 1
+import plotly.express as px
+data_canada = px.data.gapminder().query("country == 'Canada'")
+fig = px.bar(data_canada, x='year', y='pop')
+fig.show()
+
+```
+
+2.  Trate de ver e interpretar los datos del DataFrame. Utlice las funciones que hemos visto en clase, por ejemplo: `min`, `max`, `mean`, `median`, `quantile`, corrobore los datos con la función `describe`.
+
+```{python}
+! pip install wquantiles
+```
+
+```{python}
+data_canada = px.data.gapminder().query("country == 'Canada'")
+data_canada
+```
+
+```{python}
+data_canada.describe()
+```
+
+```{python}
+data_canada.min()
+```
+
+```{python}
+data_canada.max()
+```
+
+```{python}
+data_canada[['year','lifeExp','pop','gdpPercap','iso_num']].quantile([0.25, 0.5, 0.75])
+```
+
+```{python}
+data_canada[['year','lifeExp','pop','gdpPercap','iso_num']].mean()
+```
+
+```{python}
+data_canada[['year','lifeExp','pop','gdpPercap','iso_num']].median()
+```
+
+3.  Con los datos de los ejemplos en plotly (es decir, alguno de los DataFrame), trate de crear:
+
+    -   Un gráfico de caja.
+
+    -   Un gráfico de histograma.
+
+    -   Trate de utiliza la función [pandas.cut](https://www.google.com/url?q=https%3A%2F%2Fpandas.pydata.org%2Fdocs%2Freference%2Fapi%2Fpandas.cut.html) para crear 10 segmentos o contenedores (use la propiedad `bin`).
+
+```{python}
+Años = data_canada['lifeExp'] / 1_000_000
+```
+
+```{python}
+import pandas as pd
+```
+
+```{python}
+binned_years = pd.cut(Años, bins=10)
+binned_years.value_counts(sort=False)
+```
+
+```{python}
+ax = Años.plot.hist(figsize=(4, 4), title = 'Expectativa de vida en Años')
+ax.set_xlabel('Año')
+```
+
+```{python}
+ax = Años.plot.box()
+ax.set_title("Expectativa de Vida en Años")
+ax.set_ylabel("Años")
 ```
